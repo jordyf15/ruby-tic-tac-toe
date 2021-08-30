@@ -35,6 +35,26 @@ class Board
   def mark_board(grid, marker)
     @board_grid[grid-1] = marker
   end
+
+  def check_board()
+    # horizontal grid checking
+    if((@board_grid[0] == @board_grid[1] == @board_grid[2]) || 
+    (@board_grid[3] == @board_grid[4] == @board_grid[5]) || 
+    (@board_grid[6] == @board_grid[7] == @board_grid[8]))
+      true
+    # vertical grid checking
+    elsif ((@board_grid[0] == @board_grid[3] == @board_grid[6]) ||
+    (@board_grid[1] == @board_grid[4] == @board_grid[7]) || 
+    (@board_grid[2] == @board_grid[5] == @board_grid[8])
+      true
+    # cross grid checking
+    elsif ((@board_grid[0] == @board_grid[4] == @board_grid[8]) || 
+    (@board_grid[2]) == @board_grid[4] == @board_grid[6])
+      true
+    else
+      false 
+    end
+  end
 end
 
 
@@ -80,9 +100,10 @@ def main
     player2_name = input_name(2)
     player2_marker = input_marker(player1_marker)
     player2 = Player.new(player2_name, player2_marker)
-    
 
-   
+    unless board.check_board()
+    
+    end
   end
 end
 
