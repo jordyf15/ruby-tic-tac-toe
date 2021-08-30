@@ -32,24 +32,26 @@ class Board
     " #{@board_grid[6]} | #{@board_grid[7]} | #{@board_grid[8]} \n\n"
   end
 
-  def mark_board(grid, marker)
+  def mark_board_success?(grid, marker)
+    # if(@board_grid[grid-1].cla)
     @board_grid[grid-1] = marker
+
   end
 
   def check_board()
     # horizontal grid checking
-    if((@board_grid[0] == @board_grid[1] == @board_grid[2]) || 
-    (@board_grid[3] == @board_grid[4] == @board_grid[5]) || 
-    (@board_grid[6] == @board_grid[7] == @board_grid[8]))
+    if((@board_grid[0] == @board_grid[1] && @board_grid[1] == @board_grid[2]) || 
+    (@board_grid[3] == @board_grid[4] && @board_grid[4] == @board_grid[5]) || 
+    (@board_grid[6] == @board_grid[7] && @board_grid[7] == @board_grid[8]))
       true
     # vertical grid checking
-    elsif ((@board_grid[0] == @board_grid[3] == @board_grid[6]) ||
-    (@board_grid[1] == @board_grid[4] == @board_grid[7]) || 
-    (@board_grid[2] == @board_grid[5] == @board_grid[8])
+    elsif ((@board_grid[0] == @board_grid[3] && @board_grid[3] == @board_grid[6]) ||
+    (@board_grid[1] == @board_grid[4] && @board_grid[4] == @board_grid[7]) || 
+    (@board_grid[2] == @board_grid[5] && @board_grid[5] == @board_grid[8]))
       true
     # cross grid checking
-    elsif ((@board_grid[0] == @board_grid[4] == @board_grid[8]) || 
-    (@board_grid[2]) == @board_grid[4] == @board_grid[6])
+    elsif ((@board_grid[0] == @board_grid[4] && @board_grid[4] == @board_grid[8]) || 
+    (@board_grid[2] == @board_grid[4] && @board_grid[4] == @board_grid[6]))
       true
     else
       false 
