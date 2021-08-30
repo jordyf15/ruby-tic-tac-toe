@@ -37,3 +37,53 @@ class Board
   end
 end
 
+
+def input_name(player_number)
+  puts "What is the name of player##{player_number}"
+  player_name = gets.chomp
+  until player_name.size>0
+    puts "Please input the player name, it cannot be empty"
+    player_name = gets.chomp
+  end
+  player_name
+end
+
+def input_marker(previous_player_marker)
+  puts "What 1 letter or character that will be your marker?"
+  if previous_player_marker
+    puts "It cannot be #{previous_player_marker}"
+    player_marker = gets.chomp
+    until player_marker.size == 1 && player_marker!=previous_player_marker
+      if player_marker.size !=1 
+        puts "Please input only 1 character"
+      elsif player_marker == previous_player_marker
+        puts "It cannot be #{previous_player_marker}"
+      end
+      player_marker = gets.chomp
+    end
+  else
+    player_marker = gets.chomp
+    until player_marker.size == 1
+      puts "Please input only 1 character"
+      player_marker = gets.chomp
+    end
+  end
+end
+
+def main
+  play_again = true
+  while play_again == true
+    board = Board.new()
+    player1_name = input_name(1)
+    player1_marker = input_marker(nil)
+    player1 = Player.new(player1_name, player1_marker)
+    player2_name = input_name(2)
+    player2_marker = input_marker(player1_marker)
+    player2 = Player.new(player2_name, player2_marker)
+    
+
+   
+  end
+end
+
+main()
