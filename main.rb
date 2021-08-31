@@ -43,30 +43,38 @@ class Board
     end
   end
 
-  def check_board_draw()
-    @board_grid.count {|grid| grid.class == Integer} == 0?true : false
-  end
-
   def check_board()
-    # horizontal grid checking
-    if((@board_grid[0] == @board_grid[1] && @board_grid[1] == @board_grid[2]) || 
-    (@board_grid[3] == @board_grid[4] && @board_grid[4] == @board_grid[5]) || 
-    (@board_grid[6] == @board_grid[7] && @board_grid[7] == @board_grid[8]))
+    if (check_board_horizontal == true)
       true
-    # vertical grid checking
-    elsif ((@board_grid[0] == @board_grid[3] && @board_grid[3] == @board_grid[6]) ||
-    (@board_grid[1] == @board_grid[4] && @board_grid[4] == @board_grid[7]) || 
-    (@board_grid[2] == @board_grid[5] && @board_grid[5] == @board_grid[8]))
+    elsif (check_board_vertical == true)
       true
     # cross grid checking
     elsif ((@board_grid[0] == @board_grid[4] && @board_grid[4] == @board_grid[8]) || 
     (@board_grid[2] == @board_grid[4] && @board_grid[4] == @board_grid[6]))
       true
-    # draw game checking
     elsif (check_board_draw())
       nil
     else
       false 
+    end
+  end
+
+  private
+  def check_board_draw()
+    @board_grid.count {|grid| grid.class == Integer} == 0?true : false
+  end
+
+  def check_board_horizontal()
+    3.times do |counter|
+      break true if @board_grid[counter*3] == @board_grid[(counter*3)+1] && 
+      @board_grid[(counter*3)+1] == @board_grid[(counter*3)+2] 
+    end
+  end
+
+  def check_board_vertical()
+    3.times do |counter|
+      break true if @board_grid[counter] == @board_grid[counter+3] &&
+      @board_grid[counter+3] == @board_grid[counter+6]
     end
   end
 end
