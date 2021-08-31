@@ -113,49 +113,89 @@ def input_marker(previous_player_marker)
     player_marker
   end
 end
-# class Game later?
+
+class Game
+  def initialize
+    @board = Board.new
+    @players = []
+    @player_turn = 1
+  end
+
+  def create_player()
+    player_name = input_player_name(@players.size+1)
+    player_marker = input_player_marker(@players.size==0?nil:@players[0].marker)
+    player = Player.new(player_name, player_marker)
+    @players.push(player)
+  end
+
+  def play_game
+    loop do
+      @board.print_board_grid
+      loop do
+        puts "#{@players[@player_turn-1].name}, please enter a number(1-9) that is available to put '#{@players[@player_turn-1].marker}"
+        break if @board.mark_board_success?(@players[@player_turn-1].place_mark)
+      end
+      @player_turn = @player_turn==1?2:1
+      break if @board.check_board==true || @board.check_board == nil
+    end
+  end
+
+  def conclude_game
+    @board.print_board_grid
+    if @board.check_board == nil
+      puts "Draw"
+    elsif @player_turn == 2
+      puts "Player 1 #{@players[0].name} Wins!"
+    else
+      puts "Player 2 #{@players[1].name} Wins!"
+    end
+  end
+  
+  private
+  def input_player_name(player_number)
+    puts "What is the name of player##{player_number}"
+    player_name = gets.chomp
+    until player_name.size>0
+      puts "Please input the player name, it cannot be empty"
+      player_name = gets.chomp
+    end
+    player_name
+  end
+
+  def input_player_marker(previous_player_marker)
+    puts "What 1 letter or character that will be your marker?"
+    if previous_player_marker
+      puts "It cannot be #{previous_player_marker}"
+      player_marker = gets.chomp
+      until player_marker.size == 1 && player_marker!=previous_player_marker
+        if player_marker.size !=1 
+          puts "Please input only 1 character"
+        elsif player_marker == previous_player_marker
+          puts "It cannot be #{previous_player_marker}"
+        end
+        player_marker = gets.chomp
+      end
+      player_marker
+    else
+      player_marker = gets.chomp
+      until player_marker.size == 1
+        puts "Please input only 1 character"
+        player_marker = gets.chomp
+      end
+      player_marker
+    end
+  end
+end
+
 def main
+  puts "Welcome to jordy's Tic-tac-toe!!"
   play_again = true
   while play_again == true
-    board = Board.new
-    player1_name = input_name(1)
-    player1_marker = input_marker(nil)
-    player1 = Player.new(player1_name, player1_marker)
-    player2_name = input_name(2)
-    player2_marker = input_marker(player1_marker)
-    player2 = Player.new(player2_name, player2_marker)
-    player_turn = 1
-
-    game_finish = board.check_board
-    loop do
-      board.print_board_grid
-      if player_turn == 1
-        loop do
-          puts "#{player1.name}, please enter a number (1-9) that is available to put '#{player1.marker}'"
-          mark_success = board.mark_board_success?(player1.place_mark)
-          break if mark_success
-        end
-        game_finish = board.check_board
-        player_turn = 2
-      else
-        loop do
-          puts "#{player2.name}, please enter a number (1-9) that is available to put '#{player2.marker}'"
-          mark_success = board.mark_board_success?(player2.place_mark)
-          break if mark_success
-        end
-        game_finish = board.check_board
-        player_turn = 1
-      end  
-      break if board.check_board==true || board.check_board == nil
-    end
-    board.print_board_grid
-    if board.check_board == nil
-      puts "Draw"
-    elsif player_turn == 2
-      puts "PLAYER 1 #{player1.name} WINS"
-    else
-      puts "PLAYER 2 #{player2.name} WINS"
-    end
+    game = Game.new
+    game.create_player
+    game.create_player
+    game.play_game
+    game.conclude_game
 
     puts "Do you want to play again? Input 'y' for yes and 'n'for no."
     play_again_input = gets.chomp
