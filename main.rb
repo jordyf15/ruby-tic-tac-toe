@@ -43,6 +43,10 @@ class Board
     end
   end
 
+  def check_board_draw()
+    @board_grid.count {|grid| grid.class == Integer} == 0?true : false
+  end
+
   def check_board()
     # horizontal grid checking
     if((@board_grid[0] == @board_grid[1] && @board_grid[1] == @board_grid[2]) || 
@@ -59,15 +63,7 @@ class Board
     (@board_grid[2] == @board_grid[4] && @board_grid[4] == @board_grid[6]))
       true
     # draw game checking
-    elsif (@board_grid[0].class != Integer &&
-      @board_grid[1].class != Integer &&
-      @board_grid[2].class != Integer &&
-      @board_grid[3].class != Integer &&
-      @board_grid[4].class != Integer &&
-      @board_grid[5].class != Integer &&
-      @board_grid[6].class != Integer &&
-      @board_grid[7].class != Integer &&
-      @board_grid[8].class != Integer)
+    elsif (check_board_draw())
       nil
     else
       false 
