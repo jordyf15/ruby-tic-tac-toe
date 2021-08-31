@@ -1,4 +1,5 @@
 class Player
+  attr_reader :marker, :name
   def initialize(name, marker)
     @name = name
     @marker = marker
@@ -12,6 +13,7 @@ class Player
         puts "Please input between 1-9"
       end
     end
+    {grid: grid, marker: marker}
   end
 end
 
@@ -32,10 +34,13 @@ class Board
     " #{@board_grid[6]} | #{@board_grid[7]} | #{@board_grid[8]} \n\n"
   end
 
-  def mark_board_success?(grid, marker)
-    # if(@board_grid[grid-1].cla)
-    @board_grid[grid-1] = marker
-
+  def mark_board_success?(player_move)
+    if(@board_grid[player_move[:grid]-1].class == Integer)
+      @board_grid[player_move[:grid]-1] = player_move[:marker]
+      true
+    else
+      false
+    end
   end
 
   def check_board()
@@ -53,6 +58,17 @@ class Board
     elsif ((@board_grid[0] == @board_grid[4] && @board_grid[4] == @board_grid[8]) || 
     (@board_grid[2] == @board_grid[4] && @board_grid[4] == @board_grid[6]))
       true
+    # draw game checking
+    elsif (@board_grid[0].class != Integer &&
+      @board_grid[1].class != Integer &&
+      @board_grid[2].class != Integer &&
+      @board_grid[3].class != Integer &&
+      @board_grid[4].class != Integer &&
+      @board_grid[5].class != Integer &&
+      @board_grid[6].class != Integer &&
+      @board_grid[7].class != Integer &&
+      @board_grid[8].class != Integer)
+      nil
     else
       false 
     end
@@ -83,30 +99,70 @@ def input_marker(previous_player_marker)
       end
       player_marker = gets.chomp
     end
+    player_marker
   else
     player_marker = gets.chomp
     until player_marker.size == 1
       puts "Please input only 1 character"
       player_marker = gets.chomp
     end
+    player_marker
   end
 end
-
+# class Game later?
 def main
   play_again = true
   while play_again == true
-    board = Board.new()
+    board = Board.new
     player1_name = input_name(1)
     player1_marker = input_marker(nil)
     player1 = Player.new(player1_name, player1_marker)
     player2_name = input_name(2)
     player2_marker = input_marker(player1_marker)
     player2 = Player.new(player2_name, player2_marker)
+    player_turn = 1
 
-    unless board.check_board()
-    
+    game_finish = board.check_board
+    loop do
+      board.print_board_grid
+      if player_turn == 1
+        loop do
+          puts "#{player1.name}, please enter a number (1-9) that is available to put '#{player1.marker}'"
+          mark_success = board.mark_board_success?(player1.place_mark)
+          break if mark_success
+        end
+        game_finish = board.check_board
+        player_turn = 2
+      else
+        loop do
+          puts "#{player2.name}, please enter a number (1-9) that is available to put '#{player2.marker}'"
+          mark_success = board.mark_board_success?(player2.place_mark)
+          break if mark_success
+        end
+        game_finish = board.check_board
+        player_turn = 1
+      end  
+      break if board.check_board==true || board.check_board == nil
     end
+    board.print_board_grid
+    if board.check_board == nil
+      puts "Draw"
+    elsif player_turn == 2
+      puts "PLAYER 1 #{player1.name} WINS"
+    else
+      puts "PLAYER 2 #{player2.name} WINS"
+    end
+
+    puts "Do you want to play again? Input 'y' for yes and 'n'for no."
+    play_again_input = gets.chomp
+    until play_again_input == 'y' || play_again_input == 'n'
+      puts "Please input 'y' for yes and 'n'for no."
+      play_again_input = gets.chomp
+    end
+    play_again = false if play_again_input == 'n'
   end
+  puts "Thank you for playing and have a nice day."
 end
 
 main()
+
