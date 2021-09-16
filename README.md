@@ -9,5 +9,5 @@ Put the following commands to the terminal one by one
 ```
     git clone https://github.com/jordyf15/ruby-tic-tac-toe.git
     cd ruby-tic-tac-toe
-    ruby main.rb
+    ruby lib/main.rb
 ```
